@@ -2,11 +2,8 @@ const uuidv4 = require('uuid/v4')
 
 /*
 *	createUser
-*	Creates a user.
-*	@prop id {string}
-*	@prop name {string}
-*	@param {object} 
-*		name {string}
+*	Создаёт юзера
+*	
 */
 const createUser = ({name = "", socketId=null} = {})=>(
 	{
@@ -19,14 +16,8 @@ const createUser = ({name = "", socketId=null} = {})=>(
 
 /*
 *	createMessage
-*	Creates a messages object.
-* 	@prop id {string}
-* 	@prop time {Date} the time in 24hr format i.e. 14:22
-* 	@prop message {string} actual string message
-* 	@prop sender {string} sender of the message
-*	@param {object} 
-*		message {string}
-*		sender {string}
+*	Создаёт объект сообщения
+* 	
 */
 const createMessage = ({message = "", sender = ""} = { })=>(
 		{
@@ -40,31 +31,51 @@ const createMessage = ({message = "", sender = ""} = { })=>(
 
 /*
 *	createChat
-*	Creates a Chat object
-* 	@prop id {string}
-* 	@prop name {string}
-* 	@prop messages {Array.Message}
-* 	@prop users {Array.string}
-*	@param {object} 
-*		messages {Array.Message}
-*		name {string}
-*		users {Array.string}
-* 
+*	Создать объект чата
+* 	
 */
-const createChat = ({messages = [], name = "Community", users = []} = {})=>(
+const createChat = ({messages = [], name = "Community", users = [], isCommunity=false} = {})=>(
 	{
 		id:uuidv4(),
-		name,
+		name: isCommunity ? "Community": createChatNameFromUsers(users),
 		messages,
 		users,
-		typingUsers:[]
+		typingUsers:[],
+		isCommunity
 	}
 )
+// createChatNameFromUsers
+const createChatNameFromUsers=(users, excludedUser="")=>{
+return users.filter(u=>u !== excludedUser).join(' & ') || "Empty Users"
+}
+const burger =()=>{
+	
 
+		// Get all "navbar-burger" elements
+		const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+	  console.log($navbarBurgers)
+		// Check if there are any navbar burgers
+		if ($navbarBurgers.length > 0) {
+	  
+		  // Add a click event on each of them
+		  $navbarBurgers.forEach( el => {
+			el.addEventListener('onClick', () => {
+	  
+			  // Get the target from the "data-target" attribute
+			  const target = el.dataset.target;
+			  const $target = document.getElementById(target);
+	  
+			  // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+			  el.classList.toggle('is-active');
+			  $target.classList.toggle('is-active');
+	  
+			});
+		  });
+		}
+}
 
 /*
-*	@param date {Date}
-*	@return a string represented in 24hr time i.e. '11:30', '19:30'
+* Вернуть стринг с датой
 */
 const getTime = (date)=>{
 	return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`
@@ -73,5 +84,7 @@ const getTime = (date)=>{
 module.exports = {
 	createMessage,
 	createChat,
-	createUser
+	createUser,
+	createChatNameFromUsers,
+	burger
 }

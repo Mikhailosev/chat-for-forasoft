@@ -14,18 +14,9 @@ export default class Layout extends Component {
       user: null
     };
   }
-
-      function() {
-        var burger = document.querySelector(".burger");
-        var nav = document.querySelector("#" + burger.dataset.target);
-
-        burger.addEventListener("click", function() {
-          burger.classList.toggle("is-active");
-          nav.classList.toggle("is-active");
-        });
-      }
   componentWillMount() {
     this.initSocket();
+   
   }
 
   initSocket = () => {
@@ -48,11 +39,10 @@ export default class Layout extends Component {
     this.setState({ user: null });
   };
   render() {
-    const { title } = this.props;
     const { socket, user } = this.state;
     return (
       <div className="container">
-        {title}
+       
         {
           !user ?
         <LoginForm socket={socket} setUser={this.setUser} />
@@ -63,3 +53,28 @@ export default class Layout extends Component {
     );
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any navbar burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+
+        // Get the target from the "data-target" attribute
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
+      });
+    });
+  }
+
+});

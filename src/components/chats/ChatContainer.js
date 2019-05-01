@@ -3,13 +3,15 @@ import SideBar from "../sidebar/SideBar";
 import ChatHeading from "../chats/ChatHeading";
 import Messages from "../messages/Messages";
 import MessageInput from "../messages/MessageInput";
-
+import { values } from 'lodash'
 import {
   COMMUNITY_CHAT,
   MESSAGE_SENT,
   MESSAGE_RECIEVED,
   TYPING,
-  PRIVATE_MESSAGE
+  PRIVATE_MESSAGE,
+  USER_CONNECTED,
+  USER_DISCONNECTED
 } from "../../Events";
 class ChatContainer extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class ChatContainer extends Component {
 
     this.state = {
       chats: [],
+      users:[],
       activeChat: null
     };
   }
@@ -24,12 +27,26 @@ class ChatContainer extends Component {
     const { socket } = this.props;
     this.initSocket(socket)
   }
+  componentWillUnmount(){
+    const { socket}=this.props
+    socket.off(PRIVATE_MESSAGE)
+    socket.off(USER_CONNECTED)
+    socket.off(USER_DISCONNECTED)
+  }
   initSocket(socket){
-    const {user}=this.props
     socket.emit(COMMUNITY_CHAT, this.resetChat)
     socket.on(PRIVATE_MESSAGE, this.addChat)
     socket.on('connect', ()=>{
       socket.emit(COMMUNITY_CHAT, this.resetChat)
+    })
+    socket.on(USER_CONNECTED, (users)=>{
+      console.log(values(users))
+      this.setState({users:values(users)})
+    })
+    socket.on(USER_DISCONNECTED, (users)=>{
+      console.log(values(users))
+
+      this.setState({users:values(users)})
     })
   }
 
@@ -104,19 +121,20 @@ class ChatContainer extends Component {
     this.setState({ activeChat });
   };
   render() {
-    const { user, logout } = this.props;
-    const { chats, activeChat } = this.state;
+    const { user, logout} = this.props;
+    const { chats, activeChat, users } = this.state;
     return (
-      <div className="columns is-multiline">
+      <div className="">
         <SideBar
         onSendPrivateMessage={this.sendOpenPrivateMessage}
           logout={logout}
           chats={chats}
           user={user}
+          users={users}
           activeChat={activeChat}
           setActiveChat={this.setActiveChat}
         />
-        <div className="column is-full has-text-centered">
+        <div className="">
           {activeChat !== null ? (
             <div className="column">
               <ChatHeading name={activeChat.name} />

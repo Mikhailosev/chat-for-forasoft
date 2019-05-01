@@ -1,5 +1,4 @@
 import React from "react";
-import fa from "font-awesome/css/font-awesome.css";
 export default function({name, numberOfUsers}) {
 	
 	return (

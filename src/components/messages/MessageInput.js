@@ -40,7 +40,6 @@ export default class MessageInput extends Component {
 	*	Начинает интервал, который проверяет если пользователь печатает
 	*/
 	startCheckingTyping = ()=>{
-		console.log("Typing");
 		this.typingInterval = setInterval(()=>{
 			if((Date.now() - this.lastUpdateTime) > 300){
 				this.setState({isTyping:false})
@@ -53,7 +52,6 @@ export default class MessageInput extends Component {
 	*	Закачанчивает интервал
 	*/
 	stopCheckingTyping = ()=>{
-		console.log("Stop Typing");
 		if(this.typingInterval){
 			clearInterval(this.typingInterval)
 			this.props.sendTyping(false)
@@ -64,7 +62,7 @@ export default class MessageInput extends Component {
 	render() {
 		const { message } = this.state
 		return (
-			<div className="message-input">
+			<div className="message-input has-text-centered">
 				<form 
 					onSubmit={ this.handleSubmit }
 					className="message-form">

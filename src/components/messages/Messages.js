@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import "bulma/css/bulma.css";
 
 class Messages extends Component {
     constructor(props){
@@ -18,22 +19,23 @@ class Messages extends Component {
     render() {
         const { messages ,user, typingUsers}=this.props
         return (
+           
             <div ref='container'
-            className="column is-full">
-            <div className="thread">
+            className="column is-full has has-text-centered">
+            <h1> Messages</h1>
+            <div >
             {
                 messages.map((mes)=>{
                     return(
                         <div 
                         key={mes.id}
-                        className={`message-container ${mes.sender === user.name && 'right'}`}
+                        className={`${mes.sender === user.name ? 'is-primary ' : "" }`}
                         >
-                        <div className="time">{mes.time}</div>
-                        <div className="data">
-                        <div className="message">{mes.message}</div>
-                        <div className="name">{mes.sender}</div>
+
+                        <div className="message has-text-centered">{mes.time} {mes.message} <i>{mes.sender}</i></div>
+           
                         </div>
-                        </div>
+                     
                     )
                 })
             }
@@ -49,7 +51,7 @@ class Messages extends Component {
                 })
             }
                 </div>
-                Messages
+                
             </div>
         );
     }
